@@ -1,1 +1,0 @@
-export provideExampleValue from './provideExampleValue'
