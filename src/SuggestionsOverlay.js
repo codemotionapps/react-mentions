@@ -1,147 +1,144 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { defaultStyle } from 'substyle';
+const PropTypes = require(`prop-types`);
+const React = require(`react`);
 
-import utils from './utils';
+const Suggestion = require(`./Suggestion`);
+const { countSuggestions, noop, getSuggestions } = require(`./utils`);
 
-import Suggestion from './Suggestion';
-import LoadingIndicator from './LoadingIndicator';
+function translateValue(right, bottom){
+  let applyTranslate = false;
+  const translate = {
+    y: 0,
+    x: 0
+  };
 
-class SuggestionsOverlay extends Component {
+  if(right > window.innerWidth){
+    applyTranslate = true;
+    translate.x = `-100%`;
+  }
 
+  if(bottom > window.innerHeight){
+    applyTranslate = true;
+    translate.y = `-107%`;
+  }
+
+  if(applyTranslate){
+    return `translate(${translate.x},${translate.y})`;
+  }
+
+  return ``;
+}
+
+class SuggestionsOverlay extends React.Component {
   static propTypes = {
     suggestions: PropTypes.object.isRequired,
     focusIndex: PropTypes.number,
     scrollFocusedIntoView: PropTypes.bool,
-    isLoading: PropTypes.bool,
     onSelect: PropTypes.func,
+    onMouseMove: PropTypes.func
   };
 
   static defaultProps = {
     suggestions: {},
-    onSelect: () => null,
+    onSelect: noop,
+    onMouseMove: noop
   };
 
-  componentDidUpdate() {
-    const { suggestions } = this.refs
-    if (!suggestions || suggestions.offsetHeight >= suggestions.scrollHeight || !this.props.scrollFocusedIntoView) {
-      return
-    }
-
-    const scrollTop = suggestions.scrollTop
-    let { top, bottom } = suggestions.children[this.props.focusIndex].getBoundingClientRect();
-    const { top: topContainer } = suggestions.getBoundingClientRect();
-    top = top - topContainer + scrollTop;
-    bottom = bottom - topContainer + scrollTop;
-
-    if(top < scrollTop) {
-      suggestions.scrollTop = top
-    } else if(bottom > suggestions.offsetHeight) {
-      suggestions.scrollTop = bottom - suggestions.offsetHeight
-    }
+  setDomRef = ::this.setDomRef;
+  setDomRef(ref){
+    this.domRef = ref;
   }
 
-  render() {
-    const { suggestions, isLoading, style, onMouseDown } = this.props;
+  render(){
+    const { suggestions, onMouseDown, position } = this.props;
 
     // do not show suggestions until there is some data
-    if(utils.countSuggestions(suggestions) === 0 && !isLoading) {
+    if(countSuggestions(suggestions) === 0){
       return null;
     }
 
-    return (
-      <div
-        {...style}
-        onMouseDown={onMouseDown}
-      >
-
-        <ul
-          ref="suggestions"
-          { ...style("list") }
-        >
-          { this.renderSuggestions() }
-        </ul>
-
-        { this.renderLoadingIndicator() }
-      </div>
-    );
+    return <div class="mentions" style={position} onMouseDown={onMouseDown} ref={this.setDomRef}>
+      {this.renderSuggestions()}
+    </div>;
   }
 
-  renderSuggestions() {
-    return utils.getSuggestions(this.props.suggestions).reduce((result, { suggestions, descriptor }) => [
-      ...result,
+  renderSuggestions(){
+    return getSuggestions(this.props.suggestions).reduce(
+      (result, { suggestions, descriptor }) => [
+        ...result,
 
-      ...suggestions.map((suggestion, index) => this.renderSuggestion(
-        suggestion,
-        descriptor,
-        result.length + index
-      ))
-    ], []);
+        ...suggestions.map((suggestion, index) => this.renderSuggestion(
+          suggestion,
+          descriptor,
+          result.length + index
+        ))
+      ]
+    , []);
   }
 
-  renderSuggestion(suggestion, descriptor, index) {
-    let id = this.getID(suggestion);
-    let isFocused = (index === this.props.focusIndex);
+  renderSuggestion(suggestion, descriptor, index){
+    const id = this.getID(suggestion);
+    const isFocused = index === this.props.focusIndex;
 
-    let { mentionDescriptor, query } = descriptor;
+    const { mentionDescriptor, query } = descriptor;
 
     return (
       <Suggestion
-        style={this.props.style("item")}
         key={ id }
         id={ id }
-        ref={isFocused ? "focused" : null}
         query={ query }
-        index={ index }
         descriptor={ mentionDescriptor }
         suggestion={ suggestion }
         focused={ isFocused }
-        onClick={ () => this.select(suggestion, descriptor) }
-        onMouseEnter={ () => this.handleMouseEnter(index) } />
+        onClick={this.select.bind(this, suggestion, descriptor)}
+        onMouseMove={this.handleMouseMove.bind(this, index)} />
     );
   }
 
-  getID(suggestion) {
-    if(suggestion instanceof String) {
+  componentDidUpdate(){
+    const suggestions = this.domRef;
+    if(!suggestions) return;
+
+    suggestions.style.transform = ``;
+
+    const rect = suggestions.getBoundingClientRect();
+
+    const transform = suggestions.style.transform = translateValue(rect.right, rect.bottom);
+
+    const topContainer = transform === `` ?
+      rect.top :
+      suggestions.getBoundingClientRect().top;
+
+    if(suggestions.offsetHeight >= suggestions.scrollHeight || !this.props.scrollFocusedIntoView){
+      return;
+    }
+
+    const scrollTop = suggestions.scrollTop;
+    let { top, bottom } = suggestions.children[this.props.focusIndex].getBoundingClientRect();
+    top = top - topContainer + scrollTop;
+    bottom = bottom - topContainer + scrollTop;
+
+    if(top < scrollTop){
+      suggestions.scrollTop = top;
+    }else if(bottom > suggestions.offsetHeight){
+      suggestions.scrollTop = bottom - suggestions.offsetHeight;
+    }
+  }
+
+  getID(suggestion){
+    if(suggestion instanceof String){
       return suggestion;
     }
 
     return suggestion.id;
   }
 
-  renderLoadingIndicator () {
-    if(!this.props.isLoading) {
-      return;
-    }
-
-    return <LoadingIndicator { ...this.props.style("loadingIndicator") } />
+  handleMouseMove(index){
+    this.props.onMouseMove(index);
   }
 
-  handleMouseEnter(index, ev) {
-    if(this.props.onMouseEnter) {
-      this.props.onMouseEnter(index);
-    }
-  }
-
-  select(suggestion, descriptor) {
+  select(suggestion, descriptor){
     this.props.onSelect(suggestion, descriptor);
   }
-
 }
 
-const styled = defaultStyle(({ position }) => ({
-  position: "absolute",
-  zIndex: 1,
-  backgroundColor: "white",
-  marginTop: 14,
-  minWidth: 100,
-  ...position,
-
-  list: {
-    margin: 0,
-    padding: 0,
-    listStyleType: "none",
-  }
-}));
-
-export default styled(SuggestionsOverlay);
+export default SuggestionsOverlay;

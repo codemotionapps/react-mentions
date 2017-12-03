@@ -1,16 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defaultStyle } from 'substyle';
 
-const styled = defaultStyle({
-  fontWeight: "inherit"
-});
+const { noop } = require(`./utils`);
 
-const Mention = styled(({ display, style }) => (
-  <strong {...style}>
-    { display }
-  </strong>
-));
+// const styled = defaultStyle({
+//   fontWeight: "inherit"
+// });
+
+const Mention = ({ display, style }) => <strong {...style}>{display}</strong>;
 
 Mention.propTypes = {
   /**
@@ -27,24 +24,23 @@ Mention.propTypes = {
   onAdd: PropTypes.func,
   onRemove: PropTypes.func,
 
-  renderSuggestion: PropTypes.func,
+  renderSuggestion: PropTypes.func.isRequired,
 
   trigger: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.instanceOf(RegExp)
   ]),
 
-  isLoading: PropTypes.bool,
+  isLoading: PropTypes.bool
 };
 
 Mention.defaultProps = {
-  trigger: "@",
+  trigger: `@`,
 
-  onAdd: () => null,
-  onRemove: () => null,
-  renderSuggestion: null,
+  onAdd: noop,
+  onRemove: noop,
   isLoading: false,
   appendSpaceOnAdd: false
 };
 
-export default Mention;
+module.exports = Mention;

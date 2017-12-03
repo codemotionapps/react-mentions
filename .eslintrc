@@ -1,3 +1,28 @@
 {
-    extends: "signavio"
+    "env": {
+		"browser": true,
+		"commonjs": true,
+		"es6": true,
+		"node": false
+	},
+	"parserOptions": {
+		"ecmaVersion": 6,
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"modules": true,
+			"jsx": true
+		}
+	},
+	"parser": "babel-eslint",
+	"extends": "dimitarnestorov",
+	"rules": {
+		"indent": "off",
+		"react/jsx-uses-vars": "error",
+		"react/jsx-uses-react": "error",
+		"babel/no-undef": "off"
+	},
+	"plugins": [
+		"react",
+		"babel"
+	]
 }
