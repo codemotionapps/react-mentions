@@ -124,7 +124,7 @@ class MentionsInput extends React.Component {
   render(){
     const { name, value, markup, displayTransform, style } = this.props;
     const { plain, stripped } = getPlainAndStripped(value, markup, displayTransform);
-    return <div class="menitons-input-container" {...style}>
+    return <div class="mentions-input-container" {...style}>
       <input type="hidden" name={name} value={stripped} />
 
       {this.renderCaretFinder(plain)}
