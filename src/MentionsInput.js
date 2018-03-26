@@ -70,6 +70,8 @@ const propTypes = {
   value: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 
+  onWheel: PropTypes.func,
+
   className: PropTypes.string,
   refProp: PropTypes.string,
   inputRef: PropTypes.func,
@@ -101,6 +103,7 @@ class MentionsInput extends React.Component {
     displayTransform(_id, display, _type){
       return display;
     },
+    onWheel: noop,
     onChange: noop,
     onKeyDown: noop,
     onSelect: noop,
@@ -231,6 +234,7 @@ class MentionsInput extends React.Component {
       onSelect={this.addMention}
       onMouseDown={this.handleSuggestionsMouseDown}
       onMouseMove={this.setFocusIndex}
+      onWheel={this.props.onWheel}
       isLoading={this.isLoading()}
     />, document.body);
   }

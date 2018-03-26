@@ -49,14 +49,14 @@ class SuggestionsOverlay extends React.Component {
   }
 
   render(){
-    const { suggestions, onMouseDown, position } = this.props;
+    const { suggestions, onMouseDown, position, onWheel } = this.props;
 
     // do not show suggestions until there is some data
     if(countSuggestions(suggestions) === 0){
       return null;
     }
 
-    return <div class="mentions" style={position} onMouseDown={onMouseDown} ref={this.setDomRef}>
+    return <div class="mentions" style={position} onWheel={onWheel} onMouseDown={onMouseDown} ref={this.setDomRef}>
       {this.renderSuggestions()}
     </div>;
   }
