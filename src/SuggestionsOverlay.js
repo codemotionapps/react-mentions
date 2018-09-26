@@ -2,7 +2,7 @@ const PropTypes = require(`prop-types`);
 const React = require(`react`);
 
 const Suggestion = require(`./Suggestion`);
-const { countSuggestions, noop, getSuggestions } = require(`./utils`);
+const { countSuggestions, noop, getSuggestions, getDescriptor } = require(`./utils`);
 
 function translateValue(right, bottom){
   let applyTranslate = false;
@@ -49,14 +49,22 @@ class SuggestionsOverlay extends React.Component {
   }
 
   render(){
-    const { suggestions, onMouseDown, position, onWheel } = this.props;
+    const { suggestions, onMouseDown, position, onWheel} = this.props;
 
     // do not show suggestions until there is some data
     if(countSuggestions(suggestions) === 0){
       return null;
     }
-
-    return <div class="mentions" style={position} onWheel={onWheel} onMouseDown={onMouseDown} ref={this.setDomRef}>
+    let css = "mentions";
+    const descriptor = getDescriptor(suggestions);
+    if(descriptor){
+      const {mentionDescriptor} = descriptor;
+      const {className} = mentionDescriptor.props;
+      if(className){
+        css += ` ${className}`
+      }    
+    }
+    return <div class={css} style={position} onWheel={onWheel} onMouseDown={onMouseDown} ref={this.setDomRef}>
       {this.renderSuggestions()}
     </div>;
   }

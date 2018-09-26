@@ -23,7 +23,7 @@ Mention.propTypes = {
    */
   onAdd: PropTypes.func,
   onRemove: PropTypes.func,
-
+  className: PropTypes.string,
   renderSuggestion: PropTypes.func.isRequired,
 
   trigger: PropTypes.oneOfType([

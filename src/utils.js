@@ -347,6 +347,15 @@ export function getSuggestions(suggestions){
 
   return result;
 }
+export function getDescriptor(suggestions){
+  for(const mentionType in suggestions){
+    if(!suggestions.hasOwnProperty(mentionType)){
+      return;
+    }
+    return suggestions[mentionType];
+  }
+}
+
 
 export function getSuggestion(suggestions, index){
   return getSuggestions(suggestions).reduce((result, { suggestions, descriptor }) => [
