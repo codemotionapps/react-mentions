@@ -31,7 +31,7 @@ export default class CaretFinder extends React.Component {
 		this.props.onCaretPositionChange(position);
 	}
 
-	setCaretRef = ::this.setCaretRef;
+	setCaretRef = this.setCaretRef.bind(this);
 	setCaretRef(ref){
 		this.caretRef = ref;
 	}
@@ -58,4 +58,4 @@ export default class CaretFinder extends React.Component {
 	componentDidUpdate(){
 		this.updateCaretPosition();
 	}
-};
+}

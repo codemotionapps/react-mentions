@@ -43,7 +43,7 @@ class SuggestionsOverlay extends React.Component {
     onMouseMove: noop
   };
 
-  setDomRef = ::this.setDomRef;
+  setDomRef = this.setDomRef.bind(this);
   setDomRef(ref){
     this.domRef = ref;
   }
@@ -55,14 +55,14 @@ class SuggestionsOverlay extends React.Component {
     if(countSuggestions(suggestions) === 0){
       return null;
     }
-    let css = "mentions";
+    let css = `mentions`;
     const descriptor = getDescriptor(suggestions);
     if(descriptor){
       const {mentionDescriptor} = descriptor;
       const {className} = mentionDescriptor.props;
       if(className){
-        css += ` ${className}`
-      }    
+        css += ` ${className}`;
+      }
     }
     return <div class={css} style={position} onWheel={onWheel} onMouseDown={onMouseDown} ref={this.setDomRef}>
       {this.renderSuggestions()}

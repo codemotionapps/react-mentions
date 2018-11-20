@@ -137,7 +137,7 @@ class MentionsInput extends React.Component {
     </div>;
   }
 
-  setCaretPosition = ::this.setCaretPosition;
+  setCaretPosition = this.setCaretPosition.bind(this)
   setCaretPosition(caretPosition){
     this.setState({
       caretPosition
@@ -155,7 +155,7 @@ class MentionsInput extends React.Component {
     />;
   }
 
-  setInputRef = ::this.setInputRef;
+  setInputRef = this.setInputRef.bind(this)
   setInputRef(ref){
     this.inputRef = ref;
     this.props.inputRef(ref);
@@ -199,12 +199,12 @@ class MentionsInput extends React.Component {
     return <Component {...inputProps} />;
   }
 
-  setSuggestionsRef = ::this.setSuggestionsRef;
+  setSuggestionsRef = this.setSuggestionsRef.bind(this)
   setSuggestionsRef(ref){
     this.suggestionsRef = ref;
   }
 
-  setFocusIndex = ::this.setFocusIndex;
+  setFocusIndex = this.setFocusIndex.bind(this)
   setFocusIndex(focusIndex){
     if(focusIndex === this.state.focusIndex) return;
     this.setState({
@@ -243,7 +243,7 @@ class MentionsInput extends React.Component {
     this.props.onChange.apply(null, arguments);
   }
 
-  handleChange = ::this.handleChange;
+  handleChange = this.handleChange.bind(this)
   handleChange(ev){
     // if we are inside iframe, we need to find activeElement within its contentDocument
     const currentDocument = (document.activeElement && document.activeElement.contentDocument) || document;
@@ -294,7 +294,7 @@ class MentionsInput extends React.Component {
     this.executeOnChange(newValue, newPlainTextValue, mentions);
   }
 
-  handleSelect = ::this.handleSelect
+  handleSelect = this.handleSelect.bind(this)
   handleSelect(ev){
     // do nothing while a IME composition session is active
     if(isComposing) return;
@@ -316,7 +316,7 @@ class MentionsInput extends React.Component {
     this.props.onSelect(ev);
   }
 
-  handleKeyDown = ::this.handleKeyDown;
+  handleKeyDown = this.handleKeyDown.bind(this)
   handleKeyDown(ev){
     // do not intercept key events if the suggestions overlay is not shown
     const suggestionsCount = countSuggestions(this.state.suggestions);
@@ -376,7 +376,7 @@ class MentionsInput extends React.Component {
     });
   }
 
-  handleBlur = ::this.handleBlur;
+  handleBlur = this.handleBlur.bind(this)
   handleBlur(ev){
     const clickedSuggestion = this._suggestionsMouseDown;
     this._suggestionsMouseDown = false;
@@ -393,7 +393,7 @@ class MentionsInput extends React.Component {
     this.props.onBlur(ev, clickedSuggestion);
   }
 
-  handleSuggestionsMouseDown = ::this.handleSuggestionsMouseDown;
+  handleSuggestionsMouseDown = this.handleSuggestionsMouseDown.bind(this)
   handleSuggestionsMouseDown(){
     this._suggestionsMouseDown = true;
   }
@@ -422,12 +422,12 @@ class MentionsInput extends React.Component {
     });
   }
 
-  handleCompositionStart = ::this.handleCompositionStart;
+  handleCompositionStart = this.handleCompositionStart.bind(this)
   handleCompositionStart(){
     isComposing = true;
   }
 
-  handleCompositionEnd = ::this.handleCompositionEnd;
+  handleCompositionEnd = this.handleCompositionEnd.bind(this)
   handleCompositionEnd(){
     isComposing = false;
   }
@@ -558,7 +558,7 @@ class MentionsInput extends React.Component {
     });
   }
 
-  addMention = ::this.addMention
+  addMention = this.addMention.bind(this)
   addMention(suggestion, {mentionDescriptor, querySequenceStart, querySequenceEnd, plainTextValue}){
     // Insert mention in the marked up value at the correct position
     const value = this.props.value || ``;
