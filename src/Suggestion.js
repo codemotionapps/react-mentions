@@ -71,4 +71,4 @@ class Suggestion extends Component {
   }
 }
 
-module.exports = Suggestion;
+export default Suggestion;

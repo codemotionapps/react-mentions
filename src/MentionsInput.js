@@ -9,8 +9,8 @@ import isEqual from 'lodash/isEqual';
 
 import SuggestionsOverlay from './SuggestionsOverlay';
 
-const CaretFinder = require(`./CaretFinder`);
-const {
+import CaretFinder from './CaretFinder';
+import {
   escapeRegex,
   noop,
   isNumber,
@@ -26,7 +26,7 @@ const {
   spliceString,
   getEndOfLastMention,
   extend
-} = require(`./utils`);
+} from './utils';
 
 export const _getTriggerRegex = function(trigger, options = {}){
   if(trigger instanceof RegExp) return trigger;
@@ -610,4 +610,4 @@ class MentionsInput extends React.Component {
   _queryId = 0;
 }
 
-module.exports = MentionsInput;
+export default MentionsInput;

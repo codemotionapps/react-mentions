@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const { noop } = require(`./utils`);
+import { noop } from './utils';
 
 // const styled = defaultStyle({
 //   fontWeight: "inherit"
@@ -43,4 +43,4 @@ Mention.defaultProps = {
   appendSpaceOnAdd: false
 };
 
-module.exports = Mention;
+export default Mention;

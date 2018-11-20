@@ -1,8 +1,8 @@
-const PropTypes = require(`prop-types`);
-const React = require(`react`);
+import PropTypes from 'prop-types';
+import React from 'react';
 
-const Suggestion = require(`./Suggestion`);
-const { countSuggestions, noop, getSuggestions, getDescriptor } = require(`./utils`);
+import Suggestion from './Suggestion';
+import { countSuggestions, noop, getSuggestions, getDescriptor } from './utils';
 
 function translateValue(right, bottom){
   let applyTranslate = false;

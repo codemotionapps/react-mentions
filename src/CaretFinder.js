@@ -1,9 +1,9 @@
-const PropTypes = require(`prop-types`);
-const React = require(`react`);
+import PropTypes from 'prop-types';
+import React from 'react';
 
-const { areValuesEqual } = require(`./utils`);
+import { areValuesEqual } from './utils';
 
-module.exports = class CaretFinder extends React.Component {
+export default class CaretFinder extends React.Component {
 	static propTypes = {
 		onCaretPositionChange: PropTypes.func.isRequired,
 		value: PropTypes.string.isRequired,
